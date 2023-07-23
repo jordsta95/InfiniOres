@@ -20,7 +20,6 @@ import java.util.Map;
 @Mod(InfiniOres.MODID)
 public class InfiniOres {
     public static final String MODID = "infiniores";
-    public static Map blockList;
 
     public InfiniOres() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -31,22 +30,7 @@ public class InfiniOres {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, InfiniOresCommonConfigs.SPEC, "inifiniores.toml");
 
-        makeOreList();
     }
 
-    private void makeOreList(){
-//        Map<String, Object> kv = new HashMap<>();
-//
-//        kv.put("minecraft:stone", ForgeRegistries.BLOCKS.getValue(new ResourceLocation("minecraft:stone")));
-//        //kv.put(InfiniOresCommonConfigs.INIFINIORE_ORE.toString(), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(InfiniOresCommonConfigs.INIFINIORE_ORE.toString())));
-//
-//        System.out.println("FINDME");
-//        System.out.println(kv);
-//
-//        this.blockList = kv;
-    }
 
-    public Map getBlockList(){
-        return this.blockList;
-    }
 }

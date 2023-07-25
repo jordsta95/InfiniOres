@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "features": "infiniores:ore_spawner",
+  "biomes": "#minecraft:is_overworld",
+  "step": "underground_ores"
+}

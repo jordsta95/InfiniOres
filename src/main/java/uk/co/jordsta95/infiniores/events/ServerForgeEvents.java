@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = InfiniOres.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = InfiniOres.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerForgeEvents {
     // listen for when the server starts so that we can add biome modifiers
     @SubscribeEvent

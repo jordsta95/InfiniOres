@@ -9,18 +9,20 @@ public class InfiniOresCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> INIFINIORE_MAX_TIER;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INIFINIORE_ORES;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INIFINIORE_ORE_WEIGHTS;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INIFINIORE_ORE_REMOVE;
+    public static final ForgeConfigSpec.ConfigValue<Integer> INFINIORE_MAX_TIER;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INFINIORE_ORES;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INFINIORE_ORE_WEIGHTS;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> INFINIORE_ORE_REMOVE;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> INFINIORES_PILLARS;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> INFINIORES_NOTIFY;
 
     static{
         BUILDER.push("InfiniOres Config");
-        INIFINIORE_MAX_TIER = BUILDER.comment("What is the maximum tier (spread distance) an infinite ore vein should be?")
+        INFINIORE_MAX_TIER = BUILDER.comment("What is the maximum tier (spread distance) an infinite ore vein should be?")
                 .define("Maximum blocks from origin", 10);
-        INIFINIORE_ORES = BUILDER.comment("Which ores to have infinite ore spawners?")
+        INFINIORE_ORES = BUILDER.comment("Which ores to have infinite ore spawners?")
                 .defineList("Block IDs for InifiniOre Spawner to use", Arrays.asList("minecraft:iron_ore","minecraft:gold_ore","minecraft:diamond_ore", "minecraft:emerald_ore", "minecraft:coal_ore", "minecraft:copper_ore", "minecraft:lapis_ore", "minecraft:redstone_ore"), entry -> true);
-        INIFINIORE_ORE_WEIGHTS = BUILDER.comment("Weight of Ore Spawner using each ore; higher number = more likely to be chosen. Lower weight will also affect respawn rates for ores")
+        INFINIORE_ORE_WEIGHTS = BUILDER.comment("Weight of Ore Spawner using each ore; higher number = more likely to be chosen. Lower weight will also affect respawn rates for ores")
                 .defineList("Ore weighting", Arrays.asList("10","5","1","1","15", "10", "2", "3"), entry -> true);
 
         BUILDER.comment("---");
@@ -37,11 +39,11 @@ public class InfiniOresCommonConfigs {
 
         BUILDER.comment("Which ore veins will be removed from spawning naturally?");
         BUILDER.comment("Ore veins are not the same as ores! ");
-        INIFINIORE_ORE_REMOVE = BUILDER.comment("If trying to disable an ore from a mod, only use this if the mod doesn't have a config option to disable it.")
+        INFINIORE_ORE_REMOVE = BUILDER.comment("If trying to disable an ore from a mod, only use this if the mod doesn't have a config option to disable it.")
                 .defineList("Prevent spawning",
                         Arrays.asList(
                                 "minecraft:ore_iron_small", "minecraft:ore_iron_middle", "minecraft:ore_iron_upper" //Iron
-                                ,"minecraft:ore_gold", "minecraft:ore_gold_lower", "minecraft:ore_gold_upper" //Gold
+                                ,"minecraft:ore_gold", "minecraft:ore_gold_lower" //Gold
                                 ,"minecraft:ore_coal_upper", "minecraft:ore_coal_lower" //Coal
                                 ,"minecraft:ore_diamond", "minecraft:ore_diamond_large", "minecraft:ore_diamond_buried" //Diamond
                                 , "minecraft:ore_lapis", "minecraft:ore_lapis_buried" //Lapis
@@ -51,6 +53,9 @@ public class InfiniOresCommonConfigs {
                         ),
                         entry -> true);
 
+        INFINIORES_PILLARS = BUILDER.comment("Ore pillars are small structures that will force they way to the surface from the ore spawning block when a chunk generates an ore spawner")
+                .define("Should ore pillars spawn?", true);
+        INFINIORES_NOTIFY = BUILDER.define("Notify player(s) when a chunk loads with an ore spawner?", true);
 
 
 

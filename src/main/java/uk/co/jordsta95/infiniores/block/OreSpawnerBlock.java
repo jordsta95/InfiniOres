@@ -2,6 +2,8 @@ package uk.co.jordsta95.infiniores.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,11 +30,11 @@ public class OreSpawnerBlock extends Block implements EntityBlock {
         super(properties);
     }
 
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state){
         BlockEntity entity = BlockEntityInit.ORE_SPAWNER_BLOCK_ENTITY.get().create(pos, state);
+        //System.out.println("Ore spawner block at: "+pos.getX()+", "+pos.getY()+", "+pos.getZ());
         if(entity instanceof OreSpawnerBlockEntity blockEntity) {
             blockEntity.generateData();
         }
@@ -47,9 +50,10 @@ public class OreSpawnerBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND){
+
             BlockEntity e = level.getBlockEntity(pos);
             if(e instanceof OreSpawnerBlockEntity blockEntity){
-                blockEntity.incrementTier();
+                player.sendSystemMessage(Component.literal("Ore: "+blockEntity.getOre()+" Tier: "+blockEntity.getTier()));
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }
         }

@@ -2,32 +2,22 @@ package uk.co.jordsta95.infiniores.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.jordsta95.infiniores.InfiniOres;
 import uk.co.jordsta95.infiniores.blockentity.util.TickableBlockEntity;
 import uk.co.jordsta95.infiniores.config.InfiniOresCommonConfigs;
 import uk.co.jordsta95.infiniores.init.BlockEntityInit;
-import net.minecraft.world.level.Level;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import static uk.co.jordsta95.infiniores.config.InfiniOresCommonConfigs.*;
 
 public class OreSpawnerBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int tier = 0;
-    private int maxTier = InfiniOresCommonConfigs.INIFINIORE_MAX_TIER.get();
+    private int maxTier = InfiniOresCommonConfigs.INFINIORE_MAX_TIER.get();
     private String ore = "minecraft:stone";
     private int weight = 100;
     public OreSpawnerBlockEntity(BlockPos pos, BlockState state){
@@ -67,17 +57,21 @@ public class OreSpawnerBlockEntity extends BlockEntity implements TickableBlockE
 //        return 1;
 //        this.tier++;
 //        setChanged();
-        System.out.println(this.tier);
         System.out.println(this.ore);
+        System.out.println(this.tier);
         return this.tier;
+    }
+
+    public String getOre(){
+        return this.ore;
     }
 
     public void generateData(){
         var infinioresData = new CompoundTag();
 
         if(infinioresData.getInt("Tier") == 0) {
-            String[] ores = InfiniOresCommonConfigs.INIFINIORE_ORES.get().stream().toArray(String[]::new);
-            String[] weights = InfiniOresCommonConfigs.INIFINIORE_ORE_WEIGHTS.get().stream().toArray(String[]::new);
+            String[] ores = InfiniOresCommonConfigs.INFINIORE_ORES.get().stream().toArray(String[]::new);
+            String[] weights = InfiniOresCommonConfigs.INFINIORE_ORE_WEIGHTS.get().stream().toArray(String[]::new);
 
             String[] oreList = new String[0];
 
@@ -104,8 +98,8 @@ public class OreSpawnerBlockEntity extends BlockEntity implements TickableBlockE
             int num = generateRandomNumber(1, oreList.length);
             String ore = oreList[num - 1]; //List is 0 indexed, num is 1-MAX; -1 to if final number is chosen
             int weight = 1; //Fallback as weight not set in config
-            if (weights.length >= num && weights[num] != null) {
-                weight = Integer.parseInt(weights[num]);
+            if (weights.length >= num && weights[num - 1] != null) {
+                weight = Integer.parseInt(weights[num - 1]);
             }
             this.tier = 1;
             this.ore = ore;
@@ -113,8 +107,36 @@ public class OreSpawnerBlockEntity extends BlockEntity implements TickableBlockE
             infinioresData.putInt("Tier", 1);
             infinioresData.putString("Ore", ore);
             infinioresData.putInt("Weight", weight);
+
             setChanged();
         }
+    }
+
+    public void generateSpirePillar(Level level, BlockPos pos){
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+
+        System.out.println("Generating pillar at: "+x+" "+y+" "+z);
+
+
+        int[][] spireBlocks = {{x, y + 1, z, 77}, {x + 1, y, z, 74}, {x - 1, y, z, 71}, {x, y, z + 1, 75}, {x, y, z-1, 73}};
+
+        for(int[] values : spireBlocks) {
+            for (int newY = values[1]; newY < values[3]; newY++) {
+                BlockPos p = new BlockPos(values[0], newY, values[2]);
+                String spire = this.ore;
+                int check = (int) (Math.random() * 100);
+                if (check > 50) {
+                    spire = "minecraft:stone";
+                }
+                if (check > 90) {
+                    spire = "minecraft:air";
+                }
+                level.setBlock(p, getBlockStateByID(spire), 2);
+            }
+        }
+
     }
 
     @Override
